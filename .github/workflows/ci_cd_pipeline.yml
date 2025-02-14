@@ -21,10 +21,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install mysql-connector-python
 
+      - name: Debug - List Files in Repository
+        run: ls -l  # Ensures schema_changes.sql exists
+
       - name: Execute SQL Script
         env:
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_DATABASE: companydb
-        
+        run: |
+          mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < schema_changes.sql
