@@ -36,4 +36,3 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_NAME: companydb
 
-has context menu
