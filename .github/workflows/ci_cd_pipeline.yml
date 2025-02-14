@@ -1,33 +1,39 @@
-name: Database Deployment
-
+name: CI/CD Pipeline for Database Deployment
+ 
 on:
   push:
     branches:
-      - main
-
+      - main  # This will trigger the workflow when changes are pushed to the main branch
+ 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-latest  # Set the environment to run the workflow
+ 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Install MySQL Client
-        run: sudo apt-get install -y mysql-client
-
-      - name: Install Python and MySQL Connector
+      # Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v2
+ 
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+ 
+      # Install dependencies (mysql-connector-python and other required packages)
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install mysql-connector-python
-
-      - name: Debug - List Files in Repository
-        run: ls -l  # Ensures schema_changes.sql exists
-
-      - name: Execute SQL Script
+ 
+      # Run the Python script to execute the SQL script
+      - name: Execute SQL script
+        run: |
+          python execute_sql.py  # This will execute your script to apply changes to the database
         env:
-          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_DATABASE: companydb
-        
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: companydb
+
+has context menu
